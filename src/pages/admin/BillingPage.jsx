@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { supabase } from "../../lib/supabase";
 import { formatCurrency } from "../../utils/formatCurrency";
+import api from "../../services/api";
 import toast from "react-hot-toast";
 
 const BillingPage = () => {
@@ -36,22 +37,14 @@ const BillingPage = () => {
     setSendingId(invoiceId);
     try {
       const order = invoices.find(i => i._id === invoiceId);
-      if (!order) throw new Error("Order not found");
-
-      let phone = order.customerWhatsApp;
-      if (phone.length === 10) phone = "91" + phone;
-      phone = phone.replace(/\D/g, "");
-
-      const baseUrl = window.location.origin;
-      const invoiceUrl = `${baseUrl}/invoice/${order._id}`;
-      const text = `🧇 *Belgian Bliss*\n_Dessert Bowl & Waffle_\n\nHello! 👋\nHere is your digital invoice:\n${invoiceUrl}\n\nHave a wonderful day! 🍫✨`;
-
-      const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
-      window.open(waUrl, "_blank");
-
-      toast.success("Invoice sent via WhatsApp ✅");
+      if (!order) {
+        throw new Error("Order not found in local state.");
+      }
+      await api.post("/send-whatsapp", { orderId: invoiceId });
+      toast.success("Invoice sent via backend! ✅");
     } catch (err) {
-      toast.error("Failed to send invoice");
+      const errorMessage = err.response?.data?.message || err.message || "Failed to send invoice via backend.";
+      toast.error(errorMessage);
     } finally {
       setSendingId(null);
     }

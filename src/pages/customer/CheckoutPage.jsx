@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { supabase } from "../../lib/supabase";
+import api from "../../services/api";
 import { formatCurrency, roundCurrency } from "../../utils/formatCurrency";
 import toast from "react-hot-toast";
 
@@ -12,7 +13,6 @@ const CheckoutPage = () => {
   const [whatsapp, setWhatsapp] = useState("");
   const [paymentMode, setPaymentMode] = useState("Cash");
   const [loading, setLoading] = useState(false);
-  const [showUPIModal, setShowUPIModal] = useState(false);
 
   const processOrderToBackend = async () => {
     setLoading(true);
@@ -66,24 +66,7 @@ const CheckoutPage = () => {
       return;
     }
 
-    if (paymentMode === "Online") {
-      // Trigger UPI Mock Modal
-      setShowUPIModal(true);
-    } else {
-      // Process Cash Order Immediately
-      processOrderToBackend();
-    }
-  };
-
-  const simulateOnlinePayment = () => {
-    setLoading(true);
-    // Simulate gateway delay
-    setTimeout(() => {
-      setLoading(false);
-      setShowUPIModal(false);
-      toast.success("Payment successful via UPI Gateway ✅");
-      processOrderToBackend();
-    }, 1500);
+    processOrderToBackend();
   };
 
   return (
@@ -173,7 +156,7 @@ const CheckoutPage = () => {
               type="submit"
               disabled={loading}
               className="btn-primary"
-              style={{ width: "100%", opacity: loading ? 0.75 : 1 }}
+              style={{ width: "100%", opacity: loading ? 0.75 : 1, transition: "opacity 0.2s" }}
             >
               {loading ? "Processing..." : paymentMode === "Online" ? "Proceed to Pay" : "✅ Confirm Order"}
             </button>
@@ -181,64 +164,6 @@ const CheckoutPage = () => {
         </div>
       </div>
 
-      {/* UPI / ONLINE PAYMENT MOCK MODAL */}
-      {showUPIModal && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)", display: "flex", alignItems: "flex-end", justifyContent: "center", zIndex: 9999 }}>
-          <div className="animate-slide-in" style={{ width: "100%", maxWidth: "520px", background: "var(--customer-card-bg)", backdropFilter: "blur(20px)", borderTopLeftRadius: "1.5rem", borderTopRightRadius: "1.5rem", padding: "2.5rem 2rem", position: "relative", borderTop: "1.5px solid var(--brand-primary)", boxShadow: "0 -10px 40px rgba(0,0,0,0.2)" }}>
-
-            <button
-              onClick={() => !loading && setShowUPIModal(false)}
-              style={{ position: "absolute", top: "1.25rem", right: "1.25rem", background: "rgba(111,78,55,0.1)", border: "none", width: "32px", height: "32px", borderRadius: "50%", color: "var(--customer-text)", fontSize: "1.1rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-            >
-              ✕
-            </button>
-
-            <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-              <div style={{ background: "rgba(34,197,94,0.1)", color: "#16a34a", padding: "0.5rem 1rem", borderRadius: "999px", display: "inline-flex", alignItems: "center", gap: "0.5rem", fontSize: "0.85rem", fontWeight: "700", marginBottom: "1rem" }}>
-                <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#16a34a" }} /> Secure Gateway
-              </div>
-              <h2 className="font-display text-customer-title" style={{ fontSize: "1.8rem", fontWeight: "800", marginBottom: "0.5rem" }}>
-                {formatCurrency(getCartTotal())}
-              </h2>
-              <p className="text-customer-subtitle" style={{ fontSize: "0.9rem" }}>Belgian Bliss • Table {selectedTable}</p>
-            </div>
-
-            <div style={{ display: "grid", gap: "1rem", marginBottom: "2rem" }}>
-              <button
-                onClick={simulateOnlinePayment}
-                disabled={loading}
-                style={{ padding: "1.1rem", borderRadius: "1rem", border: "1.5px solid var(--customer-card-border)", background: "transparent", color: "var(--customer-text)", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: loading ? "not-allowed" : "pointer" }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <span style={{ fontSize: "1.5rem" }}>📱</span> PhonePe / GPay / Paytm
-                </div>
-                <span>→</span>
-              </button>
-
-              <button
-                onClick={simulateOnlinePayment}
-                disabled={loading}
-                style={{ padding: "1.1rem", borderRadius: "1rem", border: "1.5px solid var(--customer-card-border)", background: "transparent", color: "var(--customer-text)", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: loading ? "not-allowed" : "pointer" }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <span style={{ fontSize: "1.5rem" }}>💳</span> Credit / Debit Card
-                </div>
-                <span>→</span>
-              </button>
-            </div>
-
-            {loading && (
-              <div style={{ textAlign: "center", color: "var(--brand-primary)", fontWeight: "600", fontSize: "0.9rem", marginTop: "-0.5rem", marginBottom: "1rem" }}>
-                Mocking Payment Handshake... ⏳
-              </div>
-            )}
-
-            <p style={{ textAlign: "center", color: "var(--customer-subtitle)", fontSize: "0.75rem" }}>
-              🔒 Protected by Belgian Bliss Secure Pay API
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

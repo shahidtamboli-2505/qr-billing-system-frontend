@@ -1,9 +1,16 @@
-import axios from "axios";
+import axios from 'axios';
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+if (!BACKEND_URL) {
+  // This provides a clear error during development if the .env variable is missing.
+  console.error("VITE_BACKEND_URL is not defined. Please check your .env file.");
+}
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: BACKEND_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 

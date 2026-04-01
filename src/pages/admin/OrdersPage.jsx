@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { supabase } from "../../lib/supabase";
 import { formatCurrency } from "../../utils/formatCurrency";
+import api from "../../services/api";
 import toast from "react-hot-toast";
 
 const statusFlow = {
@@ -90,25 +91,18 @@ const OrdersPage = () => {
   };
 
   // NEW: Dedicated function for WhatsApp sending (100% popup-blocker proof)
-  const handleSendWhatsApp = (order) => {
+  const handleSendWhatsApp = async (order) => {
     if (!order.customerWhatsApp || order.customerWhatsApp.length < 10) {
       toast.error("Valid WhatsApp number required!");
       return;
     }
-    const itemsList = order.items.map(item => `• ${item.name} ×${item.quantity} = ₹${item.price * item.quantity}`).join("\n");
-
-    let phone = order.customerWhatsApp;
-    if (phone.length === 10) phone = "91" + phone;
-    phone = phone.replace(/\D/g, ""); // Remove non-numeric chars
-
-    // Dynamically get the current domain (e.g., localhost:5173 or your Vercel URL)
-    const baseUrl = window.location.origin;
-    const invoiceUrl = `${baseUrl}/invoice/${order._id}`;
-    const text = `🧇 *Belgian Bliss*\n_Dessert Bowl & Waffle_\n\nHello! 👋\nThank you for visiting us today. We hope you enjoyed your desserts!\n\n🧾 *Here is your digital invoice:*\n${invoiceUrl}\n\nHave a wonderful day! 🍫✨`;
-
-    // encodeURIComponent is the most reliable way to format spaces and emojis for URLs
-    const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
-    window.open(waUrl, "_blank");
+    const toastId = toast.loading("Sending invoice via backend...");
+    try {
+      await api.post("/send-whatsapp", { orderId: order._id });
+      toast.success("Invoice sent successfully! ✅", { id: toastId });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Backend failed to send invoice.", { id: toastId });
+    }
   };
 
   const handleSaveEdit = async () => {
