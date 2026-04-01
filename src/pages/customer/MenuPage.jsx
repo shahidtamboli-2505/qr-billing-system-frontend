@@ -31,6 +31,7 @@ const MenuPage = () => {
         }));
         setMenuItems(formatted);
       } catch (err) {
+        console.error("Supabase Menu Fetch Error:", err);
         toast.error("Failed to load menu");
       } finally {
         setLoading(false);
