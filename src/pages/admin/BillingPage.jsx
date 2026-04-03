@@ -40,7 +40,7 @@ const BillingPage = () => {
       if (!order) {
         throw new Error("Order not found in local state.");
       }
-      await api.post("/send-whatsapp", { orderId: invoiceId });
+      await api.post("/api/billing/send-whatsapp", { orderId: invoiceId });
       toast.success("Invoice sent via backend! ✅");
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message || "Failed to send invoice via backend.";

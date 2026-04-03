@@ -98,7 +98,7 @@ const OrdersPage = () => {
     }
     const toastId = toast.loading("Sending invoice via backend...");
     try {
-      await api.post("/send-whatsapp", { orderId: order._id });
+      await api.post("/api/billing/send-whatsapp", { orderId: order._id });
       toast.success("Invoice sent successfully! ✅", { id: toastId });
     } catch (error) {
       toast.error(error.response?.data?.message || "Backend failed to send invoice.", { id: toastId });

@@ -42,7 +42,7 @@ const CheckoutPage = () => {
 
       // Trigger the sensitive backend route to generate an invoice placeholder
       try {
-        await api.post('/create-invoice', { orderId: newOrderId });
+        await api.post('/api/billing/create-invoice', { orderId: newOrderId });
       } catch (invoiceErr) {
         console.log("Backend invoice generation deferred:", invoiceErr.message);
       }
@@ -54,7 +54,12 @@ const CheckoutPage = () => {
       toast.success("Order placed successfully! 🎉");
       navigate("/success");
     } catch (err) {
-      toast.error("Failed to place order. Please try again.");
+      // 23503 is the PostgreSQL error code for Foreign Key Violation
+      if (err.code === '23503') {
+        toast.error("Some items in your cart are no longer available. Please clear your cart and re-add them.");
+      } else {
+        toast.error(err.message || "Failed to place order. Check console.");
+      }
       console.error(err);
     } finally {
       setLoading(false);
