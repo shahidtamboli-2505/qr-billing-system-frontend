@@ -81,7 +81,7 @@ const MenuPage = () => {
               {SHOP_NAME}
             </h1>
             <p style={{ color: "var(--brand-primary)", fontSize: "0.8rem", fontWeight: "700", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-              Table {tableId}
+              {String(tableId).toLowerCase() === 'parcel' ? '📦 Parcel Order' : `Table ${tableId}`}
             </p>
           </div>
         </div>

@@ -31,7 +31,7 @@ const CartPage = () => {
             <h1 className="font-display text-gradient" style={{ fontSize: "2.2rem", fontWeight: "900", letterSpacing: "-0.02em" }}>
               Your Cart
             </h1>
-            <p className="text-customer-subtitle" style={{ fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.05em", textTransform: "uppercase" }}>Table {selectedTable || "—"}</p>
+            <p className="text-customer-subtitle" style={{ fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.05em", textTransform: "uppercase" }}>{String(selectedTable).toLowerCase() === 'parcel' ? '📦 Parcel Order' : `Table ${selectedTable || "—"}`}</p>
           </div>
         </div>
 

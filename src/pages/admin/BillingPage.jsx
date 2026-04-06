@@ -131,7 +131,9 @@ const BillingPage = () => {
                       {inv.paymentMode}
                     </span>
                   </div>
-                  <p style={{ color: "var(--admin-text)", fontWeight: "600" }}>Table {inv.tableNumber}</p>
+                  <p style={{ color: "var(--admin-text)", fontWeight: "600" }}>
+                    {String(inv.tableNumber).toLowerCase() === "parcel" ? "📦 Parcel Order" : `Table ${inv.tableNumber}`}
+                  </p>
                   <p style={{ color: "var(--admin-muted)", fontSize: "0.82rem", marginTop: "0.15rem" }}>
                     📱 {inv.customerWhatsApp} · {inv.items.length} items
                   </p>

@@ -140,7 +140,7 @@ const ReportsPage = () => {
                     #{order._id.slice(-6).toUpperCase()}
                   </span>
                   <span style={{ color: "var(--admin-muted)", marginLeft: "0.75rem", fontSize: "0.85rem" }}>
-                    Table {order.tableNumber} · {order.items.length} items
+                    {String(order.tableNumber).toLowerCase() === "parcel" ? "Parcel" : `Table ${order.tableNumber}`} · {order.items.length} items
                   </span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>

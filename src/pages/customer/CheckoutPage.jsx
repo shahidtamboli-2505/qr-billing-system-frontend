@@ -97,7 +97,7 @@ const CheckoutPage = () => {
             Checkout 💳
           </h1>
           <p className="text-customer-subtitle" style={{ fontSize: "0.88rem", marginBottom: "2rem" }}>
-            Table {selectedTable} · {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
+            {String(selectedTable).toLowerCase() === 'parcel' ? '📦 Parcel' : `Table ${selectedTable}`} · {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
           </p>
 
           <form onSubmit={handleCheckout}>

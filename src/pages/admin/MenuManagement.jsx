@@ -18,6 +18,7 @@ const MenuManagement = () => {
   });
 
   const [saving, setSaving] = useState(false);
+  const [customCategory, setCustomCategory] = useState("");
 
   const fetchMenu = useCallback(async () => {
     try {
@@ -51,9 +52,11 @@ const MenuManagement = () => {
         description: item.description || "",
         image: item.image || ""
       });
+      setCustomCategory("");
     } else {
       setEditingItem(null);
       setFormData({ name: "", category: "Desserts", price: "", description: "", image: "" });
+      setCustomCategory("");
     }
     setIsModalOpen(true);
   };
@@ -65,7 +68,9 @@ const MenuManagement = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.price || !formData.category) {
+    const finalCategory = formData.category === "NEW_CUSTOM_ADDED" ? customCategory.trim() : formData.category;
+
+    if (!formData.name || !formData.price || !finalCategory) {
       return toast.error("Name, price, and category are required");
     }
 
@@ -73,7 +78,7 @@ const MenuManagement = () => {
     try {
       const payload = {
         name: formData.name,
-        category: formData.category,
+        category: finalCategory,
         price: Number(formData.price),
         description: formData.description || "",
         image_url: formData.image || "",
@@ -244,11 +249,22 @@ const MenuManagement = () => {
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="input-field-dark"
-                  style={{ appearance: "none" }}
+                  style={{ appearance: "none", marginBottom: formData.category === "NEW_CUSTOM_ADDED" ? "0.5rem" : "0" }}
                 >
                   {combinedCategories.map(cat => <option key={cat} value={cat} style={{ background: "var(--admin-bg)", color: "var(--admin-text)" }}>{cat}</option>)}
-                  <option value="NEW_CUSTOM_ADDED" style={{ background: "var(--admin-bg)", color: "#d97706" }}>-- Custom DB Category --</option>
+                  <option value="NEW_CUSTOM_ADDED" style={{ background: "var(--admin-bg)", color: "#d97706", fontWeight: "bold" }}>+ Add New Category</option>
                 </select>
+
+                {formData.category === "NEW_CUSTOM_ADDED" && (
+                  <input
+                    type="text"
+                    required
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value)}
+                    className="input-field-dark"
+                    placeholder="Enter new category name..."
+                  />
+                )}
               </div>
 
               {/* Image URL */}

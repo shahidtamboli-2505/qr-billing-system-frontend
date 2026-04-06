@@ -117,7 +117,7 @@ const OrdersPage = () => {
 
   const handleSaveEdit = async () => {
     if (!editTable || !editWhatsApp.trim() || editWhatsApp.length < 10) {
-      toast.error("Valid table and WhatsApp (10+ digits) required");
+      toast.error("Valid Table/Parcel and WhatsApp (10+ digits) required");
       return;
     }
 
@@ -217,8 +217,8 @@ const OrdersPage = () => {
                 {/* Customer & Table Grid */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                   <div style={{ background: "rgba(255,255,255,0.02)", padding: "0.75rem", borderRadius: "0.5rem" }}>
-                    <p style={{ color: "var(--admin-muted)", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.2rem" }}>Table</p>
-                    <p style={{ color: "var(--admin-text)", fontSize: "1.1rem", fontWeight: "700" }}>No. {order.tableNumber}</p>
+                    <p style={{ color: "var(--admin-muted)", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.2rem" }}>{String(order.tableNumber).toLowerCase() === "parcel" ? "Order Type" : "Table"}</p>
+                    <p style={{ color: "var(--admin-text)", fontSize: "1.1rem", fontWeight: "700" }}>{String(order.tableNumber).toLowerCase() === "parcel" ? "📦 Parcel" : `No. ${order.tableNumber}`}</p>
                   </div>
                   <div style={{ background: "rgba(255,255,255,0.02)", padding: "0.75rem", borderRadius: "0.5rem" }}>
                     <p style={{ color: "var(--admin-muted)", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.2rem" }}>Customer</p>
@@ -330,12 +330,12 @@ const OrdersPage = () => {
             <div style={{ display: "grid", gap: "1rem", marginBottom: "1.5rem" }}>
               <div>
                 <label style={{ display: "block", color: "var(--admin-muted)", fontSize: "0.85rem", fontWeight: "600", marginBottom: "0.5rem" }}>
-                  Table Number
+                  Table Number (or "Parcel")
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   value={editTable}
-                  onChange={(e) => setEditTable(Number(e.target.value))}
+                  onChange={(e) => setEditTable(e.target.value)}
                   style={{ width: "100%", padding: "0.75rem", borderRadius: "0.625rem", border: "1px solid var(--admin-border)", background: "rgba(255,255,255,0.03)", color: "var(--admin-text)", fontSize: "0.9rem", boxSizing: "border-box" }}
                 />
               </div>

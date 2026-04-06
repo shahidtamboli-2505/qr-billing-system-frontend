@@ -15,7 +15,6 @@ import OrdersPage from "../pages/admin/OrdersPage";
 import MenuManagement from "../pages/admin/MenuManagement";
 import BillingPage from "../pages/admin/BillingPage";
 import ReportsPage from "../pages/admin/ReportsPage";
-import TablesPage from "../pages/admin/TablesPage";
 import SettingsPage from "../pages/admin/SettingsPage";
 
 // Route Guard
@@ -73,14 +72,6 @@ const AppRoutes = () => {
         element={
           <AdminRoute>
             <ReportsPage />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/admin/tables"
-        element={
-          <AdminRoute>
-            <TablesPage />
           </AdminRoute>
         }
       />

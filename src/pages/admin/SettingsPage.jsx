@@ -1,7 +1,38 @@
+import { useState } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { SHOP_NAME } from "../../utils/constants";
+import { supabase } from "../../lib/supabase";
+import toast from "react-hot-toast";
 
 const SettingsPage = () => {
+  const [wiping, setWiping] = useState(false);
+
+  const handleWipeOrders = async () => {
+    const confirm1 = window.confirm("⚠️ DANGER: This will permanently delete ALL orders, billing history, and reports. Are you absolutely sure?");
+    if (!confirm1) return;
+
+    const confirm2 = window.prompt("Type 'RESET' to confirm deleting all orders:");
+    if (confirm2 !== "RESET") {
+      toast.error("Database reset cancelled.");
+      return;
+    }
+
+    setWiping(true);
+    const toastId = toast.loading("Wiping all orders from database...");
+    try {
+      // Delete all order items and then orders safely
+      await supabase.from('order_items').delete().not('order_id', 'is', null);
+      await supabase.from('orders').delete().not('id', 'is', null);
+
+      toast.success("Database reset to 0 successfully! 🎉", { id: toastId });
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to clear database. Check console.", { id: toastId });
+    } finally {
+      setWiping(false);
+    }
+  };
+
   return (
     <AdminLayout title="Settings" subtitle="Shop & system configuration">
       <div style={{ display: "grid", gap: "1.5rem", maxWidth: "640px" }}>
@@ -77,6 +108,23 @@ const SettingsPage = () => {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Danger Zone */}
+        <div className="admin-card" style={{ border: "1px solid rgba(239,68,68,0.3)" }}>
+          <h2 className="font-display" style={{ color: "#ef4444", fontSize: "1.1rem", fontWeight: "700", marginBottom: "1.25rem" }}>
+            ⚠️ Danger Zone
+          </h2>
+          <p style={{ color: "var(--admin-muted)", fontSize: "0.85rem", marginBottom: "1.25rem" }}>
+            Wiping the order database will permanently delete all order history, invoices, and reports. Menu items will not be affected.
+          </p>
+          <button
+            onClick={handleWipeOrders}
+            disabled={wiping}
+            style={{ width: "100%", padding: "0.875rem", borderRadius: "0.75rem", border: "none", background: "rgba(239,68,68,0.1)", color: "#ef4444", fontSize: "0.95rem", fontWeight: "700", cursor: wiping ? "not-allowed" : "pointer", transition: "all 0.2s" }}
+          >
+            {wiping ? "Wiping Database..." : "🗑 Reset All Orders to 0"}
+          </button>
         </div>
       </div>
     </AdminLayout>

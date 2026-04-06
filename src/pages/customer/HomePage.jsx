@@ -106,7 +106,7 @@ const HomePage = () => {
               <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--glow)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)" }}>🪑</div>
                 <h2 className="font-display text-customer-title" style={{ fontSize: "1.4rem", fontWeight: "800" }}>
-                  Select Table
+                  Select Table / Parcel
                 </h2>
               </div>
               <button onClick={() => setStep(1)} style={{ background: "none", border: "none", color: "var(--customer-subtitle)", fontSize: "0.85rem", cursor: "pointer", textDecoration: "underline" }}>
@@ -150,6 +150,26 @@ const HomePage = () => {
                   <span style={{ fontWeight: "700", fontSize: "1.05rem", letterSpacing: "0.05em" }}>Table {table}</span>
                 </button>
               ))}
+
+              {/* Parcel Option */}
+              <button
+                onClick={() => navigate(`/menu/Parcel`)}
+                className="table-btn animate-item-reveal"
+                style={{
+                  padding: "1.25rem",
+                  borderRadius: "1.125rem",
+                  border: "1.5px solid var(--brand-primary)",
+                  background: "rgba(217,119,6,0.05)",
+                  color: "var(--brand-primary)",
+                  cursor: "pointer",
+                  transition: "all 0.3s cubic-bezier(0.25, 1, 0.5, 1)",
+                  textAlign: "center",
+                  gridColumn: "1 / -1" // Spans the full width
+                }}
+              >
+                <span style={{ fontSize: "1.75rem", display: "block", marginBottom: "0.4rem" }}>📦</span>
+                <span style={{ fontWeight: "700", fontSize: "1.05rem", letterSpacing: "0.05em" }}>Takeaway / Parcel</span>
+              </button>
             </div>
           </div>
         )}

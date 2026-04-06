@@ -8,7 +8,6 @@ const navItems = [
   { path: "/admin/billing", icon: "💳", label: "Billing" },
   { path: "/admin/reports", icon: "📈", label: "Reports" },
   { path: "/admin/menu", icon: "🍫", label: "Menu Management" },
-  { path: "/admin/tables", icon: "🪑", label: "Tables" },
   { path: "/admin/settings", icon: "⚙️", label: "Settings" },
 ];
 

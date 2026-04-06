@@ -93,7 +93,6 @@ const InvoicePage = () => {
           <div style={{ display: "grid", gap: "0.5rem", marginBottom: "1.5rem" }}>
             {[
               { label: "Order ID", value: `#${order._id.slice(-8).toUpperCase()}` },
-              { label: "Table", value: `Table ${order.tableNumber}` },
               { label: "WhatsApp", value: order.customerWhatsApp },
               { label: "Payment", value: order.paymentMode },
               { label: "Status", value: order.orderStatus },

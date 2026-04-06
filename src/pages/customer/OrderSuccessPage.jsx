@@ -21,7 +21,7 @@ const OrderSuccessPage = () => {
           {/* Order Details */}
           <div style={{ background: "rgba(111,78,55,0.06)", borderRadius: "1rem", padding: "1.25rem", marginBottom: "1.75rem", border: "1px solid rgba(111,78,55,0.12)", textAlign: "left" }}>
             {[
-              { label: "Table", value: `Table ${selectedTable}` },
+              { label: "Order Type", value: String(selectedTable).toLowerCase() === 'parcel' ? "📦 Parcel" : `Table ${selectedTable}` },
               { label: "WhatsApp", value: customerWhatsApp },
               { label: "Order ID", value: orderId ? `#${orderId.slice(-8).toUpperCase()}` : "—" },
             ].map(({ label, value }) => (
