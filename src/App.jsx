@@ -1,10 +1,14 @@
 import AppRoutes from "./routes/AppRoutes";
 import { Toaster } from "react-hot-toast";
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <>
-      <AppRoutes />
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-grow">
+        <AppRoutes />
+      </main>
+      <Footer />
       <Toaster
         position="top-right"
         toastOptions={{
@@ -26,7 +30,7 @@ function App() {
           },
         }}
       />
-    </>
+    </div>
   );
 }
 
